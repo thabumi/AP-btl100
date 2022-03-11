@@ -1,0 +1,16 @@
+# depslib dependency file v1.0
+1646989767 source:c:\testsdl\main.cpp
+	<iostream>
+
+1646989752 source:c:\testsdl\test.cpp
+	<iostream>
+	<SDL.h>
+
+1646991111 source:c:\testsdl\testreal.cpp
+	<iostream>
+	<SDL.h>
+
+1646991430 source:c:\testsdl\testreal2.cpp
+	<iostream>
+	<SDL.h>
+
