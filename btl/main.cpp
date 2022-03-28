@@ -3,6 +3,9 @@
 #include <SDL.h>
 
 using namespace std;
+
+//lazyfoo
+
 ////Screen dimension constants
 //const int SCREEN_WIDTH = 640;
 //const int SCREEN_HEIGHT = 480;
@@ -50,103 +53,118 @@ using namespace std;
 //
 //    return 0;
 //}
-VOID LOGSDLERROR(STD::OSTREAM& OS,
-                 CONST STD::STRING &MSG, BOOL FATAL = FALSE);
 
-VOID LOGSDLERROR(STD::OSTREAM& OS,
-                 CONST STD::STRING &MSG, BOOL FATAL)
-{
-    OS << MSG << " ERROR: " << SDL_GETERROR() << STD::ENDL;
-    IF (FATAL) {
-        SDL_QUIT();
-        EXIT(1);
-    }
-}
-CONST INT SCREEN_WIDTH = 800;
-CONST INT SCREEN_HEIGHT = 600;
-CONST STRING WINDOW_TITLE = "AN IMPLEMENTATION OF CODE.ORG PAINTER";
+//uet
 
-VOID INITSDL(SDL_WINDOW* &WINDOW, SDL_RENDERER* &RENDERER);
-
-VOID INITSDL(SDL_WINDOW* &WINDOW, SDL_RENDERER* &RENDERER)
-{
-    IF (SDL_INIT(SDL_INIT_EVERYTHING) != 0)
-        LOGSDLERROR(STD::COUT, "SDL_INIT", TRUE);
-
-    WINDOW = SDL_CREATEWINDOW(WINDOW_TITLE.C_STR(), SDL_WINDOWPOS_CENTERED,
-       SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-    //WINDOW = SDL_CREATEWINDOW(WINDOW_TITLE.C_STR(), SDL_WINDOWPOS_CENTERED,
-       //SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_FULLSCREEN_DESKTOP);
-    IF (WINDOW == NULLPTR) LOGSDLERROR(STD::COUT, "CREATEWINDOW", TRUE);
-
-
-    //KHI CHạY TRONG MôI TRườNG BìNH THườNG (KHôNG CHạY TRONG MáY ảO)
-    RENDERER = SDL_CREATERENDERER(WINDOW, -1, SDL_RENDERER_ACCELERATED |
-                                              SDL_RENDERER_PRESENTVSYNC);
-    //KHI CHạY ở MáY ảO (Ví Dụ TạI MáY TíNH TRONG PHòNG THựC HàNH ở TRườNG)
-    //RENDERER = SDL_CREATESOFTWARERENDERER(SDL_GETWINDOWSURFACE(WINDOW));
-
-    IF (RENDERER == NULLPTR) LOGSDLERROR(STD::COUT, "CREATERENDERER", TRUE);
-
-    SDL_SETHINT(SDL_HINT_RENDER_SCALE_QUALITY, "LINEAR");
-    SDL_RENDERSETLOGICALSIZE(RENDERER, SCREEN_WIDTH, SCREEN_HEIGHT);
-}
-
-VOID QUITSDL(SDL_WINDOW* WINDOW, SDL_RENDERER* RENDERER);
-
-VOID QUITSDL(SDL_WINDOW* WINDOW, SDL_RENDERER* RENDERER)
-{
-	SDL_DESTROYRENDERER(RENDERER);
-	SDL_DESTROYWINDOW(WINDOW);
-	SDL_QUIT();
-}
-
-VOID WAITUNTILKEYPRESSED();
-
-VOID WAITUNTILKEYPRESSED()
-{
-    SDL_EVENT E;
-    WHILE (TRUE) {
-        IF ( SDL_WAITEVENT(&E) != 0 &&
-             (E.TYPE == SDL_KEYDOWN || E.TYPE == SDL_QUIT) )
-            RETURN;
-        SDL_DELAY(100);
-    }
-}
-
-INT MAIN(INT ARGC, CHAR* ARGV[])
-{
-    SDL_WINDOW* WINDOW;
-    SDL_RENDERER* RENDERER;
-    INITSDL(WINDOW, RENDERER);
-
-    // YOUR DRAWING CODE HERE
-    // USE SDL_RENDERPRESENT(RENDERER) TO SHOW IT
-    SDL_RENDERCLEAR(RENDERER);
-
-    SDL_SETRENDERDRAWCOLOR(RENDERER, 255, 255, 255, 255);   // WHITE
-    SDL_RENDERDRAWPOINT(RENDERER, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
-    SDL_SETRENDERDRAWCOLOR(RENDERER, 255, 0, 0, 255);   // RED
-    SDL_RENDERDRAWLINE(RENDERER, 100, 100, 200, 200);
-    SDL_RECT FILLED_RECT;
-    FILLED_RECT.X = SCREEN_WIDTH - 400;
-    FILLED_RECT.Y = SCREEN_HEIGHT - 150;
-    FILLED_RECT.W = 320;
-    FILLED_RECT.H = 100;
-    SDL_SETRENDERDRAWCOLOR(RENDERER, 0, 255, 0, 255); // GREEN
-    SDL_RENDERFILLRECT(RENDERER, &FILLED_RECT);
-
-
-   //KHI THôNG THườNG CHạY VớI MôI TRườNG BìNH THườNG ở NHà
-    SDL_RENDERPRESENT(RENDERER);
-   //KHI CHạY ở MáY THựC HàNH WINXP ở TRườNG (MáY ảO)
-   //SDL_UPDATEWINDOWSURFACE(WINDOW);
-
-
-    WAITUNTILKEYPRESSED();
-    QUITSDL(WINDOW, RENDERER);
-    RETURN 0;
-}
-
+//void logSDLError(std::ostream& os,
+//                 const std::string &msg, bool fatal = false);
+//
+//void logSDLError(std::ostream& os,
+//                 const std::string &msg, bool fatal)
+//{
+//    os << msg << " Error: " << SDL_GetError() << std::endl;
+//    if (fatal) {
+//        SDL_Quit();
+//        exit(1);
+//    }
+//}
+//const int SCREEN_WIDTH = 800;
+//const int SCREEN_HEIGHT = 600;
+//const string WINDOW_TITLE = "An Implementation of Code.org Painter";
+//
+//void initSDL(SDL_Window* &window, SDL_Renderer* &renderer);
+//
+//void initSDL(SDL_Window* &window, SDL_Renderer* &renderer)
+//{
+//    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+//        logSDLError(std::cout, "SDL_Init", true);
+//
+//    window = SDL_CreateWindow(WINDOW_TITLE.c_str(), SDL_WINDOWPOS_CENTERED,
+//       SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+//    //window = SDL_CreateWindow(WINDOW_TITLE.c_str(), SDL_WINDOWPOS_CENTERED,
+//       //SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_FULLSCREEN_DESKTOP);
+//    if (window == nullptr) logSDLError(std::cout, "CreateWindow", true);
+//
+//
+//    //Khi chạy trong môi trường bình thường (không chạy trong máy ảo)
+//    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED |
+//                                              SDL_RENDERER_PRESENTVSYNC);
+//    //Khi chạy ở máy ảo (ví dụ tại máy tính trong phòng thực hành ở trường)
+//    //renderer = SDL_CreateSoftwareRenderer(SDL_GetWindowSurface(window));
+//
+//    if (renderer == nullptr) logSDLError(std::cout, "CreateRenderer", true);
+//
+//    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+//    SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+//}
+//
+//void quitSDL(SDL_Window* window, SDL_Renderer* renderer);
+//
+//void quitSDL(SDL_Window* window, SDL_Renderer* renderer)
+//{
+//	SDL_DestroyRenderer(renderer);
+//	SDL_DestroyWindow(window);
+//	SDL_Quit();
+//}
+//
+//void waitUntilKeyPressed();
+//
+//void waitUntilKeyPressed()
+//{
+//    SDL_Event e;
+//    while (true) {
+//        if ( SDL_WaitEvent(&e) != 0 &&
+//             (e.type == SDL_KEYDOWN || e.type == SDL_QUIT) )
+//            return;
+//        SDL_Delay(100);
+//    }
+//}
+//int main(int argc, char* argv[])
+//{
+//    SDL_Window* window;
+//    SDL_Renderer* renderer;
+//    initSDL(window, renderer);
+//
+//    // Your drawing code here
+//    SDL_RenderClear(renderer);
+//
+//    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);   // white
+//    SDL_RenderDrawPoint(renderer, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+//    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);   // red
+//    SDL_RenderDrawLine(renderer, 100, 100, 200, 200);
+//    SDL_Rect filled_rect;
+//    filled_rect.x = SCREEN_WIDTH - 400;
+//    filled_rect.y = SCREEN_HEIGHT - 150;
+//    filled_rect.w = 320;
+//    filled_rect.h = 100;
+//    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255); // green
+//    SDL_RenderFillRect(renderer, &filled_rect);
+//
+//
+//   //Khi thông thường chạy với môi trường bình thường ở nhà
+//    SDL_RenderPresent(renderer);
+//   //Khi chạy ở máy thực hành WinXP ở trường (máy ảo)
+//   //SDL_UpdateWindowSurface(window);
+//
+//    // use SDL_RenderPresent(renderer) to show it
+//
+//    waitUntilKeyPressed();
+//    quitSDL(window, renderer);
+//    return 0;
+//}
+/*
+// xóa màn hình
+int SDL_RenderClear(SDL_Renderer* renderer)
+ // đặt màu vẽ r: red, g: green, b: blue, a: alpha opaque (255: mầu đặc nhất)
+int SDL_SetRenderDrawColor(SDL_Renderer* renderer, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+// vẽ điểm
+int SDL_RenderDrawPoint(SDL_Renderer* renderer, int x, int y)
+	// vẽ đoạn thẳng
+int SDL_RenderDrawLine(SDL_Renderer* renderer, int x1, int y1, int x2, int y2)
+	// vẽ hình chữ nhật rỗng
+int SDL_RenderDrawRect(SDL_Renderer* renderer, const SDL_Rect* rect)
+	// vẽ hình chữ nhật đặc
+int SDL_RenderFillRect(SDL_Renderer* renderer, const SDL_Rect* rect)
+*/
 
 
