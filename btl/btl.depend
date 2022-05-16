@@ -1,0 +1,63 @@
+# depslib dependency file v1.0
+1646989767 source:c:\testsdl\main.cpp
+	<iostream>
+
+1646989752 source:c:\testsdl\test.cpp
+	<iostream>
+	<SDL.h>
+
+1646991111 source:c:\testsdl\testreal.cpp
+	<iostream>
+	<SDL.h>
+
+1646991430 source:c:\testsdl\testreal2.cpp
+	<iostream>
+	<SDL.h>
+
+1652724498 source:c:\ap-btl3\btl\egg.cpp
+	"egg.h"
+	"someconst.h"
+	"drawcircle.h"
+	<iostream>
+	<SDL.h>
+
+1652724492 source:c:\ap-btl3\btl\main.cpp
+	<iostream>
+	<SDL.h>
+	"drawcircle.h"
+	"someconst.h"
+	"initwindow.h"
+	"egg.h"
+
+1652698954 source:c:\ap-btl3\btl\drawcircle.cpp
+	"drawcircle.h"
+	<iostream>
+
+1652716829 c:\ap-btl3\btl\drawcircle.h
+	<iostream>
+	<SDL.h>
+
+1652699815 source:c:\ap-btl3\btl\test.cpp
+
+1652711015 c:\ap-btl3\btl\color.h
+	<SDL.h>
+
+1652710657 source:c:\ap-btl3\btl\game.cpp
+
+1652724492 c:\ap-btl3\btl\egg.h
+	<iostream>
+	<SDL.h>
+
+1652716816 c:\ap-btl3\btl\initwindow.h
+	<iostream>
+	<SDL.h>
+	"someconst.h"
+
+1652723187 c:\ap-btl3\btl\someconst.h
+	<iostream>
+	<SDL.h>
+
+1652716381 source:c:\ap-btl3\btl\initwindow.cpp
+	"initwindow.h"
+	"someconst.h"
+

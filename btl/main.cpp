@@ -1,157 +1,69 @@
-
 #include <iostream>
+#include <chrono>
+#include <random>
 #include <SDL.h>
-
+#include "drawcircle.h"
+#include "someconst.h"
+#include "initwindow.h"
+#include "egg.h"
+//#pragma once
 using namespace std;
-
-//lazyfoo
-
-////Screen dimension constants
-//const int SCREEN_WIDTH = 640;
-//const int SCREEN_HEIGHT = 480;
-//int main( int argc, char* args[] )
-//{
-//    //The window we'll be rendering to
-//    SDL_Window* window = NULL;
-//
-//    //The surface contained by the window
-//    SDL_Surface* screenSurface = NULL;
-//
-//    //Initialize SDL
-//    if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
-//    {
-//        printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
-//    }
-//    else
-//    {
-//        //Create window
-//        window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
-//        if( window == NULL )
-//        {
-//            printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
-//        }
-//        else
-//        {
-//            //Get window surface
-//            screenSurface = SDL_GetWindowSurface( window );
-//
-//            //Fill the surface white
-//            SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) );
-//
-//            //Update the surface
-//            SDL_UpdateWindowSurface( window );
-//
-//            //Wait two seconds
-//            SDL_Delay( 2000 );
-//        }
-//    }
-//    //Destroy window
-//    SDL_DestroyWindow( window );
-//
-//    //Quit SDL subsystems
-//    SDL_Quit();
-//
-//    return 0;
-//}
 
 //uet
 
-//void logSDLError(std::ostream& os,
-//                 const std::string &msg, bool fatal = false);
-//
-//void logSDLError(std::ostream& os,
-//                 const std::string &msg, bool fatal)
-//{
-//    os << msg << " Error: " << SDL_GetError() << std::endl;
-//    if (fatal) {
-//        SDL_Quit();
-//        exit(1);
-//    }
-//}
-//const int SCREEN_WIDTH = 800;
-//const int SCREEN_HEIGHT = 600;
-//const string WINDOW_TITLE = "An Implementation of Code.org Painter";
-//
-//void initSDL(SDL_Window* &window, SDL_Renderer* &renderer);
-//
-//void initSDL(SDL_Window* &window, SDL_Renderer* &renderer)
-//{
-//    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
-//        logSDLError(std::cout, "SDL_Init", true);
-//
-//    window = SDL_CreateWindow(WINDOW_TITLE.c_str(), SDL_WINDOWPOS_CENTERED,
-//       SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-//    //window = SDL_CreateWindow(WINDOW_TITLE.c_str(), SDL_WINDOWPOS_CENTERED,
-//       //SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_FULLSCREEN_DESKTOP);
-//    if (window == nullptr) logSDLError(std::cout, "CreateWindow", true);
-//
-//
-//    //Khi chạy trong môi trường bình thường (không chạy trong máy ảo)
-//    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED |
-//                                              SDL_RENDERER_PRESENTVSYNC);
-//    //Khi chạy ở máy ảo (ví dụ tại máy tính trong phòng thực hành ở trường)
-//    //renderer = SDL_CreateSoftwareRenderer(SDL_GetWindowSurface(window));
-//
-//    if (renderer == nullptr) logSDLError(std::cout, "CreateRenderer", true);
-//
-//    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
-//    SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
-//}
-//
-//void quitSDL(SDL_Window* window, SDL_Renderer* renderer);
-//
-//void quitSDL(SDL_Window* window, SDL_Renderer* renderer)
-//{
-//	SDL_DestroyRenderer(renderer);
-//	SDL_DestroyWindow(window);
-//	SDL_Quit();
-//}
-//
-//void waitUntilKeyPressed();
-//
-//void waitUntilKeyPressed()
-//{
-//    SDL_Event e;
-//    while (true) {
-//        if ( SDL_WaitEvent(&e) != 0 &&
-//             (e.type == SDL_KEYDOWN || e.type == SDL_QUIT) )
-//            return;
-//        SDL_Delay(100);
-//    }
-//}
-//int main(int argc, char* argv[])
-//{
-//    SDL_Window* window;
-//    SDL_Renderer* renderer;
-//    initSDL(window, renderer);
-//
-//    // Your drawing code here
-//    SDL_RenderClear(renderer);
-//
-//    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);   // white
-//    SDL_RenderDrawPoint(renderer, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
-//    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);   // red
-//    SDL_RenderDrawLine(renderer, 100, 100, 200, 200);
-//    SDL_Rect filled_rect;
-//    filled_rect.x = SCREEN_WIDTH - 400;
-//    filled_rect.y = SCREEN_HEIGHT - 150;
-//    filled_rect.w = 320;
-//    filled_rect.h = 100;
-//    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255); // green
-//    SDL_RenderFillRect(renderer, &filled_rect);
-//
-//
-//   //Khi thông thường chạy với môi trường bình thường ở nhà
-//    SDL_RenderPresent(renderer);
-//   //Khi chạy ở máy thực hành WinXP ở trường (máy ảo)
-//   //SDL_UpdateWindowSurface(window);
-//
-//    // use SDL_RenderPresent(renderer) to show it
-//
-//    waitUntilKeyPressed();
-//    quitSDL(window, renderer);
-//    return 0;
-//}
+int main(int argc, char* argv[])
+{
+    mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+    SDL_Window* window;
+    SDL_Renderer* renderer;
+    initSDL(window, renderer);
+    // main code
+
+
+    //testing code
+
+    // Your drawing code here
+    SDL_RenderClear(renderer);
+
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);   // white
+    SDL_RenderDrawPoint(renderer, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);   // red
+    SDL_RenderDrawLine(renderer, 0, 0, 200, 200);
+    SDL_Rect filled_rect;
+    filled_rect.x = SCREEN_WIDTH - 400;
+    filled_rect.y = SCREEN_HEIGHT - 150;
+    filled_rect.w = 320;
+    filled_rect.h = 100;
+    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255); // green
+    SDL_RenderFillRect(renderer, &filled_rect);
+    SDL_RenderPresent(renderer);
+    SDL_Delay(3000);
+    SDL_RenderClear(renderer);
+    SDL_Color c = ORANGE_COLOR;
+    SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a);
+    SDL_RenderDrawLine(renderer, 150, 150, 200, 200);
+
+
+
+    Egg test1(static_cast<Egg::Type>(0), 20.5, 0);
+    Egg test2(static_cast<Egg::Type>(2), 60.6, 0);
+    test1.draw(renderer);
+    test2.draw(renderer);
+    if (test1.collision(test2)) {
+        SDL_SetRenderDrawColor(renderer, PURPLE_COLOR.r, PURPLE_COLOR.g, PURPLE_COLOR.b, PURPLE_COLOR.a);
+    }
+    if (test1.toTheEnd()) {
+        SDL_SetRenderDrawColor(renderer, CYAN_COLOR.r, CYAN_COLOR.g, CYAN_COLOR.b, CYAN_COLOR.a);
+    }
+    SDL_RenderFillCircle(renderer, EGG_TO_SHOOT_X, EGG_TO_SHOOT_Y, EGG_RADIUS);
+
+//    SDL_Delay(3000);
+    SDL_RenderPresent(renderer);
+    waitUntilKeyPressed();
+    quitSDL(window, renderer);
+    return 0;
+}
+
 /*
 // xóa màn hình
 int SDL_RenderClear(SDL_Renderer* renderer)

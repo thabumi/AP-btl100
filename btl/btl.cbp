@@ -2,7 +2,7 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="testSDL" />
+		<Option title="btl" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
@@ -31,7 +31,17 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="drawcircle.cpp" />
+		<Unit filename="drawcircle.h" />
+		<Unit filename="egg.cpp" />
+		<Unit filename="egg.h" />
+		<Unit filename="game.cpp" />
+		<Unit filename="game.h" />
+		<Unit filename="initwindow.cpp" />
+		<Unit filename="initwindow.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="someconst.h" />
+		<Unit filename="test.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>
