@@ -3,19 +3,37 @@
 
 #include <iostream>
 #include <SDL.h>
-
+#include <random>
+#include <chrono>
 using namespace std;
 
 class Egg {
 public:
     enum Type {red, green, blue};
-    Egg(Type type, double x, double y);
-    void draw(SDL_Renderer* renderer);
+    Egg();
+    Egg(Type type, double x, double y, bool visible_ = 0);
+    void draw(SDL_Renderer* renderer, bool clear_);
     void moves(double dx, double dy);
     bool collision(Egg& other);
     bool toTheEnd();
-//    vector<pair<double, double>> neighbour;
+
+
+
+    void setX(double x);
+    void setY(double y);
+    void setLocation(double x, double y);
+    void setType(Type t);
+
+    void setVisible(bool b);
+
+    double getX();
+    double getY();
+    pair<double, double> getLocation();
+    int getType();
+    bool getVisible();
+
 private:
+    bool visible_;
     double x_;
     double y_;
     Type type_;

@@ -14,20 +14,25 @@
 	<iostream>
 	<SDL.h>
 
-1652724498 source:c:\ap-btl3\btl\egg.cpp
+1652967114 source:c:\ap-btl3\btl\egg.cpp
 	"egg.h"
 	"someconst.h"
 	"drawcircle.h"
 	<iostream>
 	<SDL.h>
 
-1652724492 source:c:\ap-btl3\btl\main.cpp
+1652924048 source:c:\ap-btl3\btl\main.cpp
 	<iostream>
+	<chrono>
+	<random>
 	<SDL.h>
+	<SDL_ttf.h>
 	"drawcircle.h"
 	"someconst.h"
 	"initwindow.h"
 	"egg.h"
+	"game.h"
+	"test.h"
 
 1652698954 source:c:\ap-btl3\btl\drawcircle.cpp
 	"drawcircle.h"
@@ -37,27 +42,78 @@
 	<iostream>
 	<SDL.h>
 
-1652699815 source:c:\ap-btl3\btl\test.cpp
+1652967114 source:c:\ap-btl3\btl\test.cpp
+	<iostream>
+	<chrono>
+	<random>
+	<SDL.h>
+	<SDL_ttf.h>
+	"drawcircle.h"
+	"someconst.h"
+	"initwindow.h"
+	"egg.h"
+	"game.h"
+	"test.h"
 
 1652711015 c:\ap-btl3\btl\color.h
 	<SDL.h>
 
-1652710657 source:c:\ap-btl3\btl\game.cpp
+1652851186 source:c:\ap-btl3\btl\game.cpp
+	"game.h"
+	"initwindow.h"
+	<iostream>
+	<SDL_ttf.h>
 
-1652724492 c:\ap-btl3\btl\egg.h
+1652967122 c:\ap-btl3\btl\egg.h
 	<iostream>
 	<SDL.h>
+	<random>
+	<chrono>
 
 1652716816 c:\ap-btl3\btl\initwindow.h
 	<iostream>
 	<SDL.h>
 	"someconst.h"
 
-1652723187 c:\ap-btl3\btl\someconst.h
+1652958016 c:\ap-btl3\btl\someconst.h
 	<iostream>
+	<algorithm>
+	<cmath>
 	<SDL.h>
 
 1652716381 source:c:\ap-btl3\btl\initwindow.cpp
 	"initwindow.h"
 	"someconst.h"
+
+1652851168 c:\ap-btl3\btl\game.h
+	<SDL.h>
+	<SDL_ttf.h>
+	<iostream>
+	<vector>
+	"egg.h"
+
+1652845758 c:\ap-btl3\btl\test.cpp
+	<iostream>
+	<chrono>
+	<random>
+	<SDL.h>
+	<SDL_ttf.h>
+	"drawcircle.h"
+	"someconst.h"
+	"initwindow.h"
+	"egg.h"
+	"game.h"
+	"test.h"
+
+1652845784 c:\ap-btl3\btl\test.h
+	<iostream>
+	<chrono>
+	<random>
+	<SDL.h>
+	<SDL_ttf.h>
+	"drawcircle.h"
+	"someconst.h"
+	"initwindow.h"
+	"egg.h"
+	"game.h"
 
