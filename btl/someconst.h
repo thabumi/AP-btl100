@@ -25,7 +25,12 @@ const int EGG_RADIUS = 20;
 const int EGG_TO_SHOOT_X = GAME_UPLEFT_X + GAME_WIDTH / 2;
 const int EGG_TO_SHOOT_Y = GAME_HEIGHT - EGG_RADIUS;
 
-const long double ROW_DISTANCE = 10 * sqrt(3) + 0.5;
+const int GAME_ROW = 12;
+
+const long double ROW_DISTANCE = 20 * sqrt(3) + 0.5;
+
+const int BIG_ROW = 9;
+const int SMALL_ROW = 8;
 
 const SDL_Color CYAN_COLOR = {0, 255, 255};
 const SDL_Color BLUE_COLOR = {0, 0, 255};

@@ -17,7 +17,7 @@ Egg::Egg(Type type, double x, double y, bool visible) {
     visible_ = visible;
 }
 
-void Egg::draw(SDL_Renderer* renderer, bool clear_) {
+void Egg::draw(SDL_Renderer* renderer, bool visible_) {
     switch (type_) {
         case red:
             SDL_SetRenderDrawColor(renderer, RED_COLOR.r, RED_COLOR.g, RED_COLOR.b, RED_COLOR.a);
@@ -29,7 +29,7 @@ void Egg::draw(SDL_Renderer* renderer, bool clear_) {
             SDL_SetRenderDrawColor(renderer, BLUE_COLOR.r, BLUE_COLOR.g, BLUE_COLOR.b, BLUE_COLOR.a);
             break;
     }
-    if (clear_) {
+    if (!visible_) {
         SDL_SetRenderDrawColor(renderer, BLACK_COLOR.r, BLACK_COLOR.g, BLACK_COLOR.b, BLACK_COLOR.a);
     }
 //    SDL_RenderDrawCircle(renderer, x_, y_, EGG_RADIUS);

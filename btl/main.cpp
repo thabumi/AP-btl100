@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
     testt(window, renderer);
 //    SDL_RenderPresent(renderer);
 
-    waitUntilKeyPressed();
+//    waitUntilKeyPressed();
     quitSDL(window, renderer);
     return 0;
 }

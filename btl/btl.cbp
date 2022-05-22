@@ -37,6 +37,8 @@
 		<Unit filename="egg.h" />
 		<Unit filename="game.cpp" />
 		<Unit filename="game.h" />
+		<Unit filename="good.cpp" />
+		<Unit filename="good.h" />
 		<Unit filename="initwindow.cpp" />
 		<Unit filename="initwindow.h" />
 		<Unit filename="main.cpp" />

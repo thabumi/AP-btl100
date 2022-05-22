@@ -11,8 +11,8 @@ class Egg {
 public:
     enum Type {red, green, blue};
     Egg();
-    Egg(Type type, double x, double y, bool visible_ = 0);
-    void draw(SDL_Renderer* renderer, bool clear_);
+    Egg(Type type, double x, double y, bool visible_ = 1);
+    void draw(SDL_Renderer* renderer, bool visible_);
     void moves(double dx, double dy);
     bool collision(Egg& other);
     bool toTheEnd();
