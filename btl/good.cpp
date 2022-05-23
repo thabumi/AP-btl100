@@ -4,15 +4,12 @@
 #include <queue>
 #include <SDL.h>
 #include <SDL_ttf.h>
-#include "drawcircle.h"
-#include "someconst.h"
-#include "initwindow.h"
 #include "egg.h"
-#include "game.h"
-#include "test.h"
 #include "good.h"
+#include "someconst.h"
 
 using namespace std;
+
 SDL_Texture* loadText(TTF_Font* &gFont, SDL_Renderer* &renderer, string text, SDL_Color textColor) {
     SDL_Texture* mTexture = NULL;
     SDL_Surface* textSurface = TTF_RenderText_Solid(gFont, text.c_str(), textColor);
@@ -20,7 +17,6 @@ SDL_Texture* loadText(TTF_Font* &gFont, SDL_Renderer* &renderer, string text, SD
         printf("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
     }
     else {
-        //Create texture from surface pixels
         mTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
         if(mTexture == NULL) {
             printf("Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError());
@@ -71,7 +67,7 @@ void Good::draw(SDL_Renderer* renderer) {
     SDL_SetRenderDrawColor(renderer, YELLOW_COLOR.r, YELLOW_COLOR.g, YELLOW_COLOR.b, YELLOW_COLOR.a);
     SDL_RenderDrawRect(renderer, &gmrect);
     SDL_RenderDrawLine(renderer, GAME_UPLEFT_X, board[GAME_ROW - 1][0].getY() + ROW_DISTANCE / 2 + 5, GAME_DOWNRIGHT_X, board[GAME_ROW - 1][0].getY() + ROW_DISTANCE / 2 + 5);
-    SDL_RenderDrawLine(renderer, GAME_DOWNRIGHT_X, 70, SCREEN_WIDTH, 70);
+    SDL_RenderDrawLine(renderer, GAME_DOWNRIGHT_X, SCORE_LINE_Y, SCREEN_WIDTH, SCORE_LINE_Y);
     renderScore(renderer);
     renderOutsideEgg(renderer);
 }
@@ -293,25 +289,19 @@ void Good::run(SDL_Window* window, SDL_Renderer* renderer) {
     SDL_Event e;
 
     while (true) {
-        // Đợi 10 mili giây
         SDL_Delay(5);
 
-        // Nếu không có sự kiện gì thì tiếp tục trở về đầu vòng lặp
         if ( SDL_WaitEvent(&e) == 0) continue;
 
-        // Nếu sự kiện là kết thúc (như đóng cửa sổ) thì thoát khỏi vòng lặp
         if (e.type == SDL_QUIT) break;
 
-        // Nếu nhấn phìm ESC thì thoát khỏi vòng lặp
         if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE) break;
 
-        // Nếu chuột (mouse) được nhấn (xuống)
         int x, y;
 
         if (e.type == SDL_MOUSEBUTTONDOWN) {
             x = e.button.x; // Lấy hoành độ x của chuột
             y = e.button.y; // Lấy tung độ y của chuột
-            // Xoá toàn bộ màn hình và vẽ lại với màu sắc tuỳ thuộc chuột trái hay phải được nhấn
             pair<double, double> vt = standardize({x - EGG_TO_SHOOT_X, y - EGG_TO_SHOOT_Y});
             double stepX = vt.first;
             double stepY = vt.second;
@@ -334,17 +324,13 @@ void Good::run(SDL_Window* window, SDL_Renderer* renderer) {
                     bool brk = false;
                     for (int j = 0; j < (int)board[i].size(); j++) {
                         if (shooter.collision(board[i][j]) && board[i][j].getVisible()) {
-//                            board[i][j].setType(static_cast<Egg::Type>(shooter.getType()));
-//                            board[i][j].setVisible(0);
 
                             pair<int, int> p = closestNeighbour(i, j);
                             if (!explosion(p.first, p.second)) {
-
                                 countDown++;
                                 if (countDown == 5) {
                                     countDown = 0;
                                     down();
-
                                 }
                                 if(notGoodAnymore()) {
                                     shooter = Egg(static_cast<Egg::Type>(rng() % 3), EGG_TO_SHOOT_X, EGG_TO_SHOOT_Y, 0);
@@ -352,7 +338,6 @@ void Good::run(SDL_Window* window, SDL_Renderer* renderer) {
                                     renderEndGame(renderer);
                                     SDL_RenderPresent(renderer);
                                     SDL_Delay(500);
-
                                     return;
                                 }
                             }
@@ -373,7 +358,6 @@ void Good::run(SDL_Window* window, SDL_Renderer* renderer) {
                             b = true;
                             brk = true;
                             break;
-
                         }
                     }
                     if (brk) {
@@ -381,50 +365,17 @@ void Good::run(SDL_Window* window, SDL_Renderer* renderer) {
                     }
                 }
                 draw(renderer);
-//                SDL_SetRenderDrawColor(renderer, BLACK_COLOR.r, BLACK_COLOR.g, BLACK_COLOR.b, BLACK_COLOR.a);
-//                SDL_RenderClear(renderer);
-//                if (b) {
-//
-//
-//                    for (int i = 0; i < 12; i++) {
-//                        for (int j = 0; j < board[i].size(); j++) {
-//                            if (board[i][j].getVisible()) {
-//                                board[i][j].draw(renderer, 1);
-//                            }
-////                            board[i][j].draw(renderer, board[i][j].getVisible());
-//                        }
-//                    }
-//                                   }
-//                else {
-//
-//                    for (int i = 0; i < 12; i++) {
-//                        for (int j = 0; j < board[i].size(); j++) {
-//                            if (board[i][j].getVisible()) {
-//                                board[i][j].draw(renderer, 1);
-//                            }
-////                            board[i][j].draw(renderer, board[i][j].getVisible());
-//                        }
-//                    }
-//                }
-//                shooter.draw(renderer, shooter.getVisible());
-//                SDL_SetRenderDrawColor(renderer, YELLOW_COLOR.r, YELLOW_COLOR.g, YELLOW_COLOR.b, YELLOW_COLOR.a);
-//                SDL_RenderDrawRect(renderer, &gmrect);
-//                SDL_RenderDrawLine(renderer, GAME_UPLEFT_X, board[GAME_ROW - 1][0].getY() + ROW_DISTANCE / 2 + 5, GAME_DOWNRIGHT_X, board[GAME_ROW - 1][0].getY() + ROW_DISTANCE / 2 + 5);
+
                 SDL_RenderPresent(renderer);
                 SDL_Delay(5);
             }
-//            shooter = Egg(static_cast<Egg::Type>(rng() % 3), EGG_TO_SHOOT_X, EGG_TO_SHOOT_Y);
-//            shooter.draw(renderer, shooter.getVisible());
         }
     }
 }
 
 void Good::renderScore(SDL_Renderer* renderer) {
-    if (TTF_Init() != 0){
-        logSDLError(std::cout, "TTF_Init");
-        return;
-    }
     TTF_Font* myFont = TTF_OpenFont("futureforces.ttf", 40);
+
     SDL_Texture* scoreWord = loadText(myFont, renderer, "SCORE", YELLOW_COLOR);
     SDL_Rect scoreWordRect;
 
@@ -438,7 +389,7 @@ void Good::renderScore(SDL_Renderer* renderer) {
 
     SDL_QueryTexture(realScore, NULL, NULL, &realScoreRect.w, &realScoreRect.h);
     realScoreRect.x = (SCREEN_WIDTH + GAME_DOWNRIGHT_X - realScoreRect.w) / 2;
-    realScoreRect.y = 30;
+    realScoreRect.y = SCORE_Y;
     SDL_RenderCopy(renderer, realScore, NULL, &realScoreRect);
     TTF_CloseFont(myFont);
     SDL_DestroyTexture(scoreWord);
@@ -454,18 +405,14 @@ void Good::renderOutsideEgg(SDL_Renderer* renderer) {
         amount = 5 - countDown;
     }
     vector<Egg> outside(amount);
+
     for (int i = 0; i < amount; i++) {
-        outside[i] = Egg(static_cast<Egg::Type>(0), GAME_DOWNRIGHT_X + 20 + 50 * i, 130);
+        outside[i] = Egg(static_cast<Egg::Type>(0), FIRST_OUTSIDE_EGG_X + OUTSIDE_EGGS_DISTANCE * i, OUTSIDE_EGG_Y);
         outside[i].draw(renderer, 1);
     }
 }
 void Good::renderEndGame(SDL_Renderer* renderer) {
-    if (TTF_Init() != 0){
-        logSDLError(std::cout, "TTF_Init");
-        return;
-    }
     TTF_Font* myFont = TTF_OpenFont("futureforces.ttf", 40);
-
 
     SDL_Texture* endGame = loadText(myFont, renderer, "Game over!", YELLOW_COLOR);
 

@@ -16,12 +16,20 @@ const string WINDOW_TITLE = "Egg Shooter";
 
 const int GAME_WIDTH = 360;
 const int GAME_HEIGHT = 600;
-//const int GAME_UPLEFT_X = (SCREEN_WIDTH - GAME_WIDTH) / 2;
+//const int GAME_UPLEFT_X = (SCREEN_WIDTH - GAME_WIDTH) / 2; to have the game at the middle of the screen
 const int GAME_UPLEFT_X = 0;
 const int GAME_UPLEFT_Y = (SCREEN_HEIGHT - GAME_HEIGHT) / 2;
-//const int GAME_DOWNRIGHT_X = (SCREEN_WIDTH + GAME_WIDTH) / 2;
+//const int GAME_DOWNRIGHT_X = (SCREEN_WIDTH + GAME_WIDTH) / 2; to have the game at the middle of the screen
 const int GAME_DOWNRIGHT_X = GAME_UPLEFT_X + GAME_WIDTH;
 const int GAME_DOWNRIGHT_Y = (SCREEN_HEIGHT + GAME_HEIGHT) / 2;
+
+const int FIRST_OUTSIDE_EGG_X = GAME_DOWNRIGHT_X + 20;
+const int OUTSIDE_EGG_Y = 130;
+const int OUTSIDE_EGGS_DISTANCE = 50;
+
+const int SCORE_Y = 30;
+
+const int SCORE_LINE_Y = 70;
 
 const int EGG_RADIUS = 20;
 const int EGG_TO_SHOOT_X = GAME_UPLEFT_X + GAME_WIDTH / 2;

@@ -1,5 +1,9 @@
-#include "initwindow.h"
+#include <iostream>
+#include <SDL.h>
+#include <SDL_ttf.h>
 #include "someconst.h"
+#include "initwindow.h"
+
 using namespace std;
 
 void logSDLError(std::ostream& os,
@@ -19,8 +23,6 @@ void initSDL(SDL_Window* &window, SDL_Renderer* &renderer)
 
     window = SDL_CreateWindow(WINDOW_TITLE.c_str(), SDL_WINDOWPOS_CENTERED,
        SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-//    window = SDL_CreateWindow(WINDOW_TITLE.c_str(), SDL_WINDOWPOS_CENTERED,
-//       SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_FULLSCREEN_DESKTOP);
     if (window == nullptr) logSDLError(std::cout, "CreateWindow", true);
 
 
@@ -48,4 +50,14 @@ void waitUntilKeyPressed()
             return;
         SDL_Delay(100);
     }
+}
+
+void initTTF() {
+    if (TTF_Init() != 0){
+        logSDLError(std::cout, "TTF_Init");
+        return;
+    }
+}
+void quitTTF() {
+    TTF_Quit();
 }

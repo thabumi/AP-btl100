@@ -3,8 +3,7 @@
 
 #include <iostream>
 #include <SDL.h>
-#include <random>
-#include <chrono>
+
 using namespace std;
 
 class Egg {

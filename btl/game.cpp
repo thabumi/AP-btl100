@@ -1,22 +1,15 @@
 #include <iostream>
-#include <chrono>
-#include <random>
-#include <SDL.h>
-#include <SDL_ttf.h>
-#include "drawcircle.h"
-#include "someconst.h"
 #include "initwindow.h"
-#include "egg.h"
 #include "game.h"
-#include "test.h"
-using namespace std;
-//
+
 Game::Game() {
     initSDL(window_, renderer_);
+    initTTF();
 }
 Game::~Game() {
     waitUntilKeyPressed();
     quitSDL(window_, renderer_);
+    quitTTF();
 }
 //
 void Game::run() {

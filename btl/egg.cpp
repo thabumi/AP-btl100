@@ -1,8 +1,11 @@
+#include <iostream>
+#include <SDL.h>
+#include <random>
+#include <chrono>
 #include "egg.h"
 #include "someconst.h"
 #include "drawcircle.h"
-#include <iostream>
-#include <SDL.h>
+
 
 using namespace std;
 
@@ -32,7 +35,6 @@ void Egg::draw(SDL_Renderer* renderer, bool visible_) {
     if (!visible_) {
         SDL_SetRenderDrawColor(renderer, BLACK_COLOR.r, BLACK_COLOR.g, BLACK_COLOR.b, BLACK_COLOR.a);
     }
-//    SDL_RenderDrawCircle(renderer, x_, y_, EGG_RADIUS);
     SDL_RenderFillCircle(renderer, x_, y_, EGG_RADIUS);
 }
 

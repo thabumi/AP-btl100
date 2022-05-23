@@ -2,21 +2,19 @@
 #define GOOD_H_
 
 #include <iostream>
-#include <chrono>
-#include <random>
 #include <SDL.h>
 #include <SDL_ttf.h>
-#include "drawcircle.h"
-#include "someconst.h"
-#include "initwindow.h"
+#include <vector>
 #include "egg.h"
-#include "game.h"
-#include "test.h"
 
 using namespace std;
+
 double pointDistance(pair<double, double> a, pair<double, double> b);
+
 pair<double, double> standardize(pair<double, double> p);
+
 SDL_Texture* loadText(TTF_Font* &gFont, SDL_Renderer* &renderer, string text, SDL_Color textColor);
+
 class Good {
 public:
     Good();
