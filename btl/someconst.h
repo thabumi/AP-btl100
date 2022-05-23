@@ -10,15 +10,17 @@ using namespace std;
 
 const double eps = 1e-9;
 
-const int SCREEN_WIDTH = 800;
+const int SCREEN_WIDTH = 600;
 const int SCREEN_HEIGHT = 600;
 const string WINDOW_TITLE = "Egg Shooter";
 
 const int GAME_WIDTH = 360;
 const int GAME_HEIGHT = 600;
-const int GAME_UPLEFT_X = (SCREEN_WIDTH - GAME_WIDTH) / 2;
+//const int GAME_UPLEFT_X = (SCREEN_WIDTH - GAME_WIDTH) / 2;
+const int GAME_UPLEFT_X = 0;
 const int GAME_UPLEFT_Y = (SCREEN_HEIGHT - GAME_HEIGHT) / 2;
-const int GAME_DOWNRIGHT_X = (SCREEN_WIDTH + GAME_WIDTH) / 2;
+//const int GAME_DOWNRIGHT_X = (SCREEN_WIDTH + GAME_WIDTH) / 2;
+const int GAME_DOWNRIGHT_X = GAME_UPLEFT_X + GAME_WIDTH;
 const int GAME_DOWNRIGHT_Y = (SCREEN_HEIGHT + GAME_HEIGHT) / 2;
 
 const int EGG_RADIUS = 20;

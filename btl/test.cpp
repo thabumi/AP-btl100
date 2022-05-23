@@ -225,9 +225,15 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 //    double len = sqrt(p.first * p.first + p.second * p.second);
 //    return {p.first * 10 / len, p.second * 10 / len};
 //}
-void testt(SDL_Window* window, SDL_Renderer* renderer) {
-    Good good = Good();
 
+
+void testt(SDL_Window* window, SDL_Renderer* renderer) {
+
+//    return;
+    Good good = Good();
+    good.draw(renderer);
+    SDL_RenderPresent(renderer);
+    good.run(window, renderer);
 //    vector<vector<Egg>> board(12);
 //    SDL_Rect gmrect;
 //    gmrect.x = GAME_UPLEFT_X;
@@ -269,11 +275,8 @@ void testt(SDL_Window* window, SDL_Renderer* renderer) {
 //    test1.draw(renderer, test1.getVisible());
 //    SDL_RenderPresent(renderer);
 //    return;
-    good.draw(renderer);
-    SDL_RenderPresent(renderer);
-//    return;
-    SDL_Event e;
-    good.run(window, renderer);
+
+
 
 //    while (true) {
 //        // Đợi 10 mili giây

@@ -21,7 +21,7 @@
 	<iostream>
 	<SDL.h>
 
-1653217981 source:c:\ap-btl3\btl\main.cpp
+1653308426 source:c:\ap-btl3\btl\main.cpp
 	<iostream>
 	<chrono>
 	<random>
@@ -33,6 +33,7 @@
 	"egg.h"
 	"game.h"
 	"test.h"
+	"good.h"
 
 1652698954 source:c:\ap-btl3\btl\drawcircle.cpp
 	"drawcircle.h"
@@ -42,7 +43,7 @@
 	<iostream>
 	<SDL.h>
 
-1653215910 source:c:\ap-btl3\btl\test.cpp
+1653304714 source:c:\ap-btl3\btl\test.cpp
 	<iostream>
 	<chrono>
 	<random>
@@ -61,11 +62,18 @@
 1652711015 c:\ap-btl3\btl\color.h
 	<SDL.h>
 
-1652851186 source:c:\ap-btl3\btl\game.cpp
-	"game.h"
-	"initwindow.h"
+1653308393 source:c:\ap-btl3\btl\game.cpp
 	<iostream>
+	<chrono>
+	<random>
+	<SDL.h>
 	<SDL_ttf.h>
+	"drawcircle.h"
+	"someconst.h"
+	"initwindow.h"
+	"egg.h"
+	"game.h"
+	"test.h"
 
 1652981054 c:\ap-btl3\btl\egg.h
 	<iostream>
@@ -78,7 +86,7 @@
 	<SDL.h>
 	"someconst.h"
 
-1653198637 c:\ap-btl3\btl\someconst.h
+1653305799 c:\ap-btl3\btl\someconst.h
 	<iostream>
 	<algorithm>
 	<cmath>
@@ -88,12 +96,19 @@
 	"initwindow.h"
 	"someconst.h"
 
-1652851168 c:\ap-btl3\btl\game.h
+1653308507 c:\ap-btl3\btl\game.h
+	<iostream>
+	<chrono>
+	<random>
 	<SDL.h>
 	<SDL_ttf.h>
-	<iostream>
-	<vector>
+	"drawcircle.h"
+	"someconst.h"
+	"initwindow.h"
 	"egg.h"
+	"game.h"
+	"test.h"
+	"good.h"
 
 1652845758 c:\ap-btl3\btl\test.cpp
 	<iostream>
@@ -120,7 +135,7 @@
 	"egg.h"
 	"game.h"
 
-1653218242 source:c:\ap-btl3\btl\good.cpp
+1653308094 source:c:\ap-btl3\btl\good.cpp
 	<iostream>
 	<chrono>
 	<random>
@@ -135,7 +150,7 @@
 	"test.h"
 	"good.h"
 
-1653219136 c:\ap-btl3\btl\good.h
+1653307613 c:\ap-btl3\btl\good.h
 	<iostream>
 	<chrono>
 	<random>

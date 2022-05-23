@@ -9,17 +9,36 @@
 #include "egg.h"
 #include "game.h"
 #include "test.h"
-
+#include "good.h"
 #pragma once
 using namespace std;
-
+//SDL_Texture* loadText(TTF_Font* &gFont, SDL_Renderer* &renderer, string text, SDL_Color textColor) {
+//    SDL_Texture* mTexture = NULL;
+//    SDL_Surface* textSurface = TTF_RenderText_Solid(gFont, text.c_str(), textColor);
+//    if(textSurface == NULL) {
+//        printf("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
+//    }
+//    else {
+//        //Create texture from surface pixels
+//        mTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+//        if(mTexture == NULL) {
+//            printf("Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError());
+//        }
+//        SDL_FreeSurface(textSurface);
+//    }
+//    return mTexture;
+//}
 //uet
 int main(int argc, char* argv[])
 {
-    mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-    SDL_Window* window;
-    SDL_Renderer* renderer;
-    initSDL(window, renderer);
+    Game game;
+    game.run();
+    return 0;
+//    mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+//    SDL_Window* window;
+//    SDL_Renderer* renderer;
+//    initSDL(window, renderer);
+
     // main code
 
 
@@ -70,12 +89,30 @@ int main(int argc, char* argv[])
 //    SDL_RenderFillCircle(renderer, EGG_TO_SHOOT_X, EGG_TO_SHOOT_Y, EGG_RADIUS);
 //    SDL_Delay(3000);
 
-    testt(window, renderer);
+//    testt(window, renderer);
+//    SDL_RenderPresent(renderer);
+//    if (TTF_Init() != 0){
+//        logSDLError(std::cout, "TTF_Init");
+//        return 0;
+//    }
+//    TTF_Font* myFont = TTF_OpenFont("futureforces.ttf", 40);
+//
+//
+//    SDL_Texture* endGame = loadText(myFont, renderer, "Game over!", YELLOW_COLOR);
+//
+//    SDL_Rect endGameRect;
+//
+//    SDL_QueryTexture(endGame, NULL, NULL, &endGameRect.w, &endGameRect.h);
+//    endGameRect.x = (SCREEN_WIDTH - endGameRect.w) / 2;
+//    endGameRect.y = (SCREEN_HEIGHT - endGameRect.h) / 2;
+//    SDL_RenderCopy(renderer, endGame, NULL, &endGameRect);
 //    SDL_RenderPresent(renderer);
 
+
+
 //    waitUntilKeyPressed();
-    quitSDL(window, renderer);
-    return 0;
+//    quitSDL(window, renderer);
+//    return 0;
 }
 
 /*
