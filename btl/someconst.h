@@ -24,12 +24,13 @@ const int GAME_DOWNRIGHT_X = GAME_UPLEFT_X + GAME_WIDTH;
 const int GAME_DOWNRIGHT_Y = (SCREEN_HEIGHT + GAME_HEIGHT) / 2;
 
 const int FIRST_OUTSIDE_EGG_X = GAME_DOWNRIGHT_X + 20;
-const int OUTSIDE_EGG_Y = 130;
+const int OUTSIDE_EGG_Y = 160;
 const int OUTSIDE_EGGS_DISTANCE = 50;
 
 const int SCORE_Y = 30;
+const int HIGHSCORE_Y = 100;
 
-const int SCORE_LINE_Y = 70;
+const int SCORE_LINE_Y = 130;
 
 const int EGG_RADIUS = 20;
 const int EGG_TO_SHOOT_X = GAME_UPLEFT_X + GAME_WIDTH / 2;
@@ -41,6 +42,17 @@ const long double ROW_DISTANCE = 20 * sqrt(3) + 0.5;
 
 const int BIG_ROW = 9;
 const int SMALL_ROW = 8;
+
+
+const int MENU_PLAY_BUTTON_WIDTH = 110;
+const int MENU_PLAY_BUTTON_HEIGHT = 30;
+
+
+const int MENU_CONTINUE_BUTTON_WIDTH = 220;
+const int MENU_CONTINUE_BUTTON_HEIGHT = 30;
+
+const int RESUME_BUTTON_WIDTH = 180;
+const int RESUME_BUTTON_HEIGHT = 30;
 
 const SDL_Color CYAN_COLOR = {0, 255, 255};
 const SDL_Color BLUE_COLOR = {0, 0, 255};
@@ -55,5 +67,6 @@ const SDL_Color GREEN_COLOR = {0, 128, 0};
 
 const SDL_Color DEFAULT_COLOR = BLACK_COLOR;
 
+const int PAUSE_BUTTON_SIZE = 50;
 
 #endif // SOMECONST_H_

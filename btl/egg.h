@@ -8,7 +8,7 @@ using namespace std;
 
 class Egg {
 public:
-    enum Type {red, green, blue};
+    enum Type {red, green, blue, purple, orange};
     Egg();
     Egg(Type type, double x, double y, bool visible_ = 1);
     void draw(SDL_Renderer* renderer, bool visible_);

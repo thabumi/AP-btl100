@@ -5,14 +5,27 @@
 #include <SDL.h>
 #include "good.h"
 
+
+
 class Game {
 public:
     Game();
     ~Game();
-    void run();
+    int run();
+    int home();
+    void load();
+//    void endGame();
+    void reset();
+    void save();
+    void getHighscore();
+//    void resume();
 private:
+
     SDL_Window* window_ = nullptr;
     SDL_Renderer* renderer_ = nullptr;
+
+
+
     Good good_;
 };
 

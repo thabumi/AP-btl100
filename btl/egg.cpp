@@ -31,6 +31,12 @@ void Egg::draw(SDL_Renderer* renderer, bool visible_) {
         case blue:
             SDL_SetRenderDrawColor(renderer, BLUE_COLOR.r, BLUE_COLOR.g, BLUE_COLOR.b, BLUE_COLOR.a);
             break;
+        case purple:
+            SDL_SetRenderDrawColor(renderer, PURPLE_COLOR.r, PURPLE_COLOR.g, PURPLE_COLOR.b, PURPLE_COLOR.a);
+            break;
+        case orange:
+            SDL_SetRenderDrawColor(renderer, ORANGE_COLOR.r, ORANGE_COLOR.g, ORANGE_COLOR.b, ORANGE_COLOR.a);
+            break;
     }
     if (!visible_) {
         SDL_SetRenderDrawColor(renderer, BLACK_COLOR.r, BLACK_COLOR.g, BLACK_COLOR.b, BLACK_COLOR.a);

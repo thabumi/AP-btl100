@@ -13,8 +13,14 @@ double pointDistance(pair<double, double> a, pair<double, double> b);
 
 pair<double, double> standardize(pair<double, double> p);
 
-SDL_Texture* loadText(TTF_Font* &gFont, SDL_Renderer* &renderer, string text, SDL_Color textColor);
+bool isIn(SDL_Rect rect, double dx, double dy);
 
+SDL_Texture* loadText(TTF_Font* &gFont, SDL_Renderer* &renderer, string text, SDL_Color textColor);
+/*
+   o o
+  o o o
+   o o
+*/
 class Good {
 public:
     Good();
@@ -24,12 +30,27 @@ public:
     void reloadAmmo();
     bool notGoodAnymore();
     pair<int, int> closestNeighbour(int targetRow, int targetCol);
-    void run(SDL_Window* window, SDL_Renderer* renderer);
+    int run(SDL_Window* window, SDL_Renderer* renderer);
+    int pause(SDL_Window* window, SDL_Renderer* renderer);
     bool blank();
+    void getHighscore();
+    void loadData();
+    void saveData();
+    void resetData();
+    void resetGame();
+
     void renderScore(SDL_Renderer* renderer);
+    void renderHighscore(SDL_Renderer* renderer);
     void renderOutsideEgg(SDL_Renderer* renderer);
     void renderEndGame(SDL_Renderer* renderer);
+    void renderPauseButton(SDL_Renderer* renderer);
+
 private:
+    string boardFile = "board.txt";
+    string highscoreFile = "highscore.txt";
+    int highscore = 0;
+    SDL_Rect pauseButton;
+
     vector<vector<Egg>> board;
     Egg shooter;
     SDL_Rect gmrect;

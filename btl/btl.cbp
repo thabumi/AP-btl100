@@ -31,6 +31,8 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="Button.cpp" />
+		<Unit filename="Button.h" />
 		<Unit filename="drawcircle.cpp" />
 		<Unit filename="drawcircle.h" />
 		<Unit filename="egg.cpp" />

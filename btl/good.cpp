@@ -2,11 +2,13 @@
 #include <chrono>
 #include <random>
 #include <queue>
+#include <fstream>
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include "egg.h"
 #include "good.h"
 #include "someconst.h"
+#include "Button.h"
 
 using namespace std;
 
@@ -27,11 +29,15 @@ SDL_Texture* loadText(TTF_Font* &gFont, SDL_Renderer* &renderer, string text, SD
 }
 Good::Good() {
     mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+
     gmrect.x = GAME_UPLEFT_X;
     gmrect.y = GAME_UPLEFT_Y;
     gmrect.w = GAME_WIDTH;
     gmrect.h = GAME_HEIGHT;
-
+    pauseButton.x = SCREEN_WIDTH - PAUSE_BUTTON_SIZE;
+    pauseButton.y = SCREEN_HEIGHT - PAUSE_BUTTON_SIZE;
+    pauseButton.w = PAUSE_BUTTON_SIZE;
+    pauseButton.h = PAUSE_BUTTON_SIZE;
     shooter = Egg(static_cast<Egg::Type>(rng() % 3), EGG_TO_SHOOT_X, EGG_TO_SHOOT_Y);
 
     board.resize(13);
@@ -69,7 +75,9 @@ void Good::draw(SDL_Renderer* renderer) {
     SDL_RenderDrawLine(renderer, GAME_UPLEFT_X, board[GAME_ROW - 1][0].getY() + ROW_DISTANCE / 2 + 5, GAME_DOWNRIGHT_X, board[GAME_ROW - 1][0].getY() + ROW_DISTANCE / 2 + 5);
     SDL_RenderDrawLine(renderer, GAME_DOWNRIGHT_X, SCORE_LINE_Y, SCREEN_WIDTH, SCORE_LINE_Y);
     renderScore(renderer);
+    renderHighscore(renderer);
     renderOutsideEgg(renderer);
+    renderPauseButton(renderer);
 }
 
 void Good::down() {
@@ -284,91 +292,110 @@ bool Good::blank() {
     }
     return false;
 }
-void Good::run(SDL_Window* window, SDL_Renderer* renderer) {
+int Good::run(SDL_Window* window, SDL_Renderer* renderer) {
     mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-    SDL_Event e;
 
+    draw(renderer);
+    SDL_RenderPresent(renderer);
+    SDL_Event e;
     while (true) {
         SDL_Delay(5);
 
-        if ( SDL_WaitEvent(&e) == 0) continue;
+        if ( SDL_PollEvent(&e) == 0) continue;
 
-        if (e.type == SDL_QUIT) break;
+        if (e.type == SDL_QUIT) {
+//            saveData();
+            return 0;
+        }
 
-        if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE) break;
+        if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE) {
+//            saveData();
+            return 0;
+        }
 
         int x, y;
 
         if (e.type == SDL_MOUSEBUTTONDOWN) {
             x = e.button.x; // Lấy hoành độ x của chuột
             y = e.button.y; // Lấy tung độ y của chuột
-            pair<double, double> vt = standardize({x - EGG_TO_SHOOT_X, y - EGG_TO_SHOOT_Y});
-            double stepX = vt.first;
-            double stepY = vt.second;
-
-            bool b = false;
-            while (!b) {
-                shooter.moves(stepX, stepY);
-                if (shooter.getX() + EGG_RADIUS >= GAME_DOWNRIGHT_X || shooter.getX() - EGG_RADIUS <= GAME_UPLEFT_X) {
-                    shooter.moves(-stepX, -stepY);
-                    stepX = -stepX;
-                    shooter.moves(stepX, stepY);
+            if (inButton(pauseButton, x, y)) {
+                if (pause(window, renderer) == 0) {
+                    return 0;
                 }
-                if (shooter.getY() + EGG_RADIUS >= GAME_DOWNRIGHT_Y || shooter.getY() - EGG_RADIUS <= GAME_UPLEFT_Y) {
-                    shooter.moves(-stepX, -stepY);
-                    stepY = -stepY;
+            }
+            else {
+                pair<double, double> vt = standardize({x - EGG_TO_SHOOT_X, y - EGG_TO_SHOOT_Y});
+                double stepX = vt.first;
+                double stepY = vt.second;
+
+                bool b = false;
+                while (!b) {
+
                     shooter.moves(stepX, stepY);
-                }
+                    if (shooter.getX() + EGG_RADIUS >= GAME_DOWNRIGHT_X || shooter.getX() - EGG_RADIUS <= GAME_UPLEFT_X) {
+                        shooter.moves(-stepX, -stepY);
+                        stepX = -stepX;
+                        shooter.moves(stepX, stepY);
+                    }
+                    if (shooter.getY() + EGG_RADIUS >= GAME_DOWNRIGHT_Y || shooter.getY() - EGG_RADIUS <= GAME_UPLEFT_Y) {
+                        shooter.moves(-stepX, -stepY);
+                        stepY = -stepY;
+                        shooter.moves(stepX, stepY);
+                    }
 
-                for (int i = 0; i < 12; i++) {
-                    bool brk = false;
-                    for (int j = 0; j < (int)board[i].size(); j++) {
-                        if (shooter.collision(board[i][j]) && board[i][j].getVisible()) {
+                    for (int i = 0; i < 12; i++) {
+                        bool brk = false;
+                        for (int j = 0; j < (int)board[i].size(); j++) {
+                            if (shooter.collision(board[i][j]) && board[i][j].getVisible()) {
 
-                            pair<int, int> p = closestNeighbour(i, j);
-                            if (!explosion(p.first, p.second)) {
-                                countDown++;
-                                if (countDown == 5) {
-                                    countDown = 0;
-                                    down();
+                                pair<int, int> p = closestNeighbour(i, j);
+                                if (!explosion(p.first, p.second)) {
+                                    countDown++;
+                                    if (countDown == 5) {
+                                        countDown = 0;
+                                        down();
+                                    }
+                                    if(notGoodAnymore()) {
+                                        shooter = Egg(static_cast<Egg::Type>(rng() % 3), EGG_TO_SHOOT_X, EGG_TO_SHOOT_Y, 0);
+                                        draw(renderer);
+                                        renderEndGame(renderer);
+                                        SDL_RenderPresent(renderer);
+                                        resetGame();
+                                        SDL_Delay(2000);
+                                        return 1;
+                                    }
                                 }
-                                if(notGoodAnymore()) {
-                                    shooter = Egg(static_cast<Egg::Type>(rng() % 3), EGG_TO_SHOOT_X, EGG_TO_SHOOT_Y, 0);
-                                    draw(renderer);
-                                    renderEndGame(renderer);
-                                    SDL_RenderPresent(renderer);
-                                    SDL_Delay(500);
-                                    return;
+                                else {
+                                    highscore = max(highscore, score);
+                                    if (notGoodAnymore()) {
+                                        shooter = Egg(static_cast<Egg::Type>(rng() % 3), EGG_TO_SHOOT_X, EGG_TO_SHOOT_Y, 0);
+                                        draw(renderer);
+                                        renderEndGame(renderer);
+                                        SDL_RenderPresent(renderer);
+                                        resetGame();
+                                        SDL_Delay(2000);
+                                        return 1;
+                                    }
+                                    if (blank()) {
+                                        down();
+                                    }
                                 }
+                                shooter = Egg(static_cast<Egg::Type>(rng() % 3), EGG_TO_SHOOT_X, EGG_TO_SHOOT_Y);
+                                b = true;
+                                brk = true;
+                                break;
                             }
-                            else {
-                                if (notGoodAnymore()) {
-                                    shooter = Egg(static_cast<Egg::Type>(rng() % 3), EGG_TO_SHOOT_X, EGG_TO_SHOOT_Y, 0);
-                                    draw(renderer);
-                                    renderEndGame(renderer);
-                                    SDL_RenderPresent(renderer);
-                                    SDL_Delay(500);
-                                    return;
-                                }
-                                if (blank()) {
-                                    down();
-                                }
-                            }
-                            shooter = Egg(static_cast<Egg::Type>(rng() % 3), EGG_TO_SHOOT_X, EGG_TO_SHOOT_Y);
-                            b = true;
-                            brk = true;
+                        }
+                        if (brk) {
                             break;
                         }
                     }
-                    if (brk) {
-                        break;
-                    }
+                    draw(renderer);
+                    SDL_RenderPresent(renderer);
+                    SDL_Delay(5);
                 }
-                draw(renderer);
-
-                SDL_RenderPresent(renderer);
-                SDL_Delay(5);
             }
+
         }
     }
 }
@@ -396,6 +423,29 @@ void Good::renderScore(SDL_Renderer* renderer) {
     SDL_DestroyTexture(realScore);
 }
 
+void Good::renderHighscore(SDL_Renderer* renderer) {
+    TTF_Font* myFont = TTF_OpenFont("futureforces.ttf", 40);
+
+    SDL_Texture* highscoreWord = loadText(myFont, renderer, "HIGHSCORE", YELLOW_COLOR);
+    SDL_Rect highscoreWordRect;
+
+    SDL_QueryTexture(highscoreWord, NULL, NULL, &highscoreWordRect.w, &highscoreWordRect.h);
+    highscoreWordRect.x = (SCREEN_WIDTH + GAME_DOWNRIGHT_X - highscoreWordRect.w) / 2;
+    highscoreWordRect.y = 70;
+    SDL_RenderCopy(renderer, highscoreWord, NULL, &highscoreWordRect);
+
+    SDL_Texture* realHighscore = loadText(myFont, renderer, to_string(highscore), YELLOW_COLOR);
+    SDL_Rect realHighscoreRect;
+
+    SDL_QueryTexture(realHighscore, NULL, NULL, &realHighscoreRect.w, &realHighscoreRect.h);
+    realHighscoreRect.x = (SCREEN_WIDTH + GAME_DOWNRIGHT_X - realHighscoreRect.w) / 2;
+    realHighscoreRect.y = HIGHSCORE_Y;
+    SDL_RenderCopy(renderer, realHighscore, NULL, &realHighscoreRect);
+    TTF_CloseFont(myFont);
+    SDL_DestroyTexture(highscoreWord);
+    SDL_DestroyTexture(realHighscore);
+}
+
 void Good::renderOutsideEgg(SDL_Renderer* renderer) {
     int amount;
     if (countDown == 0 || countDown == 5) {
@@ -411,6 +461,167 @@ void Good::renderOutsideEgg(SDL_Renderer* renderer) {
         outside[i].draw(renderer, 1);
     }
 }
+
+
+void Good::renderPauseButton(SDL_Renderer* renderer) {
+    SDL_SetRenderDrawColor(renderer, YELLOW_COLOR.r, YELLOW_COLOR.g, YELLOW_COLOR.b, YELLOW_COLOR.a);
+    SDL_Rect pauseIcon1;
+    pauseIcon1.x = pauseButton.x + 10;
+    pauseIcon1.y = pauseButton.y + 10;
+    pauseIcon1.w = 30;
+    pauseIcon1.h = 30;
+
+    SDL_Rect pauseIcon2;
+    pauseIcon2.x = pauseButton.x + 20;
+    pauseIcon2.y = pauseButton.y + 10;
+    pauseIcon2.w = 10;
+    pauseIcon2.h = 30;
+
+    SDL_RenderDrawRect(renderer, &pauseButton);
+
+    SDL_RenderFillRect(renderer, &pauseIcon1);
+
+    SDL_SetRenderDrawColor(renderer, BLACK_COLOR.r, BLACK_COLOR.g, BLACK_COLOR.b, BLACK_COLOR.a);
+
+    SDL_RenderFillRect(renderer, &pauseIcon2);
+}
+
+void Good::loadData() {
+    ifstream fin("board.txt");
+    int state;
+    fin >> state;
+    if (state != 0) {
+        for (int i = 0; i < 13; i++) {
+            int len;
+            fin >> len;
+            board[i].clear();
+            board[i].resize(len);
+            for (int j = 0; j < len; j++) {
+                int typee, visiblee;
+                fin >> typee >> visiblee;
+                if (len == BIG_ROW) {
+                    board[i][j] = Egg(static_cast<Egg::Type>(typee), GAME_UPLEFT_X + EGG_RADIUS + 2 * j * EGG_RADIUS, EGG_RADIUS + i * ROW_DISTANCE, visiblee);
+                }
+                else {
+                    board[i][j] = Egg(static_cast<Egg::Type>(typee), GAME_UPLEFT_X + EGG_RADIUS * 2 + 2 * j * EGG_RADIUS, EGG_RADIUS + i * ROW_DISTANCE, visiblee);
+                }
+            }
+        }
+        int typee;
+        fin >> typee;
+        shooter.setType(static_cast<Egg::Type>(typee));
+        fin >> score;
+    }
+    fin.close();
+    ifstream finn("highscore.txt");
+    finn >> highscore;
+
+    finn.close();
+}
+void Good::saveData() {
+    remove("board.txt");
+    ofstream fout("board.txt");
+    fout << 1 << '\n';
+    for (int i = 0; i < 13; i++) {
+        fout << board[i].size() << " ";
+        for (int j = 0; j < (int)board[i].size(); j++) {
+            fout << board[i][j].getType() << " " << board[i][j].getVisible() << " ";
+        }
+        fout << '\n';
+    }
+    fout << shooter.getType() << '\n';
+    fout << score;
+    fout.close();
+    remove("highscore.txt");
+    ofstream foutt("highscore.txt");
+    foutt << highscore;
+    foutt.close();
+}
+
+void Good::resetData() {
+    mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+    shooter = Egg(static_cast<Egg::Type>(rng() % 3), EGG_TO_SHOOT_X, EGG_TO_SHOOT_Y);
+
+    board.resize(13);
+    for (int i = 0; i < 13; i++) {
+        board[i].resize(9 - i % 2);
+        for (int j = 0; j < 8 + 1 - i % 2; j++) {
+            if (i % 2 == 0) {
+                board[i][j] = Egg(static_cast<Egg::Type>(rng() % 3), GAME_UPLEFT_X + EGG_RADIUS + 2 * j * EGG_RADIUS, EGG_RADIUS + i * ROW_DISTANCE);
+            }
+            else {
+                board[i][j] = Egg(static_cast<Egg::Type>(rng() % 3), GAME_UPLEFT_X + EGG_RADIUS * 2 + 2 * j * EGG_RADIUS, EGG_RADIUS + i * ROW_DISTANCE);
+            }
+        }
+    }
+    for (int i = 10; i < 13; i++) {
+        for (int j = 0; j < (int)board[i].size(); j++) {
+            board[i][j].setVisible(false);
+        }
+    }
+    score = 0;
+    saveData();
+}
+int Good::pause(SDL_Window* window, SDL_Renderer* renderer) {
+    TTF_Font* myFont = TTF_OpenFont("futureforces.ttf", 40);
+
+    SDL_Texture* resumeButton = loadText(myFont, renderer, "Resume", YELLOW_COLOR);
+
+    SDL_Rect resumeButtonRect;
+
+    SDL_QueryTexture(resumeButton, NULL, NULL, &resumeButtonRect.w, &resumeButtonRect.h);
+    resumeButtonRect.x = (SCREEN_WIDTH - resumeButtonRect.w) / 2;
+    resumeButtonRect.y = (SCREEN_HEIGHT - resumeButtonRect.h) / 2;
+
+
+    SDL_Rect resumeButtonOutline;
+    resumeButtonOutline.w = RESUME_BUTTON_WIDTH;
+    resumeButtonOutline.h = RESUME_BUTTON_HEIGHT;
+    resumeButtonOutline.x = resumeButtonRect.x - (resumeButtonOutline.w - resumeButtonRect.w) / 2;
+    resumeButtonOutline.y = resumeButtonRect.y - (resumeButtonOutline.h - resumeButtonRect.h) / 2;
+
+    SDL_SetRenderDrawColor(renderer, BLACK_COLOR.r, BLACK_COLOR.g, BLACK_COLOR.b, BLACK_COLOR.a);
+    SDL_RenderClear(renderer);
+
+
+    SDL_RenderCopy(renderer, resumeButton, NULL, &resumeButtonRect);
+    SDL_SetRenderDrawColor(renderer, YELLOW_COLOR.r, YELLOW_COLOR.g, YELLOW_COLOR.b, YELLOW_COLOR.a);
+    SDL_RenderDrawRect(renderer, &resumeButtonOutline);
+    SDL_RenderPresent(renderer);
+    TTF_CloseFont(myFont);
+    SDL_DestroyTexture(resumeButton);
+
+
+    SDL_Event e;
+
+    while (true) {
+        SDL_Delay(5);
+        if ( SDL_PollEvent(&e) == 0) continue;
+
+        if (e.type == SDL_QUIT) {
+            saveData();
+            return 0;
+        }
+
+        if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE) {
+            saveData();
+            return 0;
+        }
+
+        int x, y;
+
+        if (e.type == SDL_MOUSEBUTTONDOWN) {
+            x = e.button.x; // Lấy hoành độ x của chuột
+            y = e.button.y; // Lấy tung độ y của chuột
+            if (inButton(resumeButtonOutline, x, y)) {
+                draw(renderer);
+                SDL_RenderPresent(renderer);
+                return 1;
+            }
+        }
+    }
+}
+// put in game file
 void Good::renderEndGame(SDL_Renderer* renderer) {
     TTF_Font* myFont = TTF_OpenFont("futureforces.ttf", 40);
 
@@ -425,4 +636,13 @@ void Good::renderEndGame(SDL_Renderer* renderer) {
     SDL_RenderPresent(renderer);
     TTF_CloseFont(myFont);
     SDL_DestroyTexture(endGame);
+}
+void Good::resetGame() {
+    score = 0;
+    countDown = 0;
+}
+void Good::getHighscore() {
+    ifstream fin("highscore.txt");
+    fin >> highscore;
+    fin.close();
 }
