@@ -6,7 +6,7 @@ always return 0 with quit
                             quit
                              ^
                              |
-    load(1)                  |         delay
+    load(1)                  |            delay
 home-------->(run(1)<--->(1)pause)->end(1)----->home
   | reset(2)   |
   |            |save
