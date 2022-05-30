@@ -14,12 +14,14 @@
 	<iostream>
 	<SDL.h>
 
-1653845491 source:c:\ap-btl3\btl\egg.cpp
+1653915125 source:c:\ap-btl3\btl\egg.cpp
 	<iostream>
 	<SDL.h>
+	<SDL_ttf.h>
 	<random>
 	<chrono>
 	"egg.h"
+	"good.h"
 	"someconst.h"
 	"drawcircle.h"
 
@@ -43,7 +45,7 @@
 1652711015 c:\ap-btl3\btl\color.h
 	<SDL.h>
 
-1653846478 source:c:\ap-btl3\btl\game.cpp
+1653913650 source:c:\ap-btl3\btl\game.cpp
 	<iostream>
 	<SDL.h>
 	<SDL_ttf.h>
@@ -53,7 +55,7 @@
 	"good.h"
 	"Button.h"
 
-1653845488 c:\ap-btl3\btl\egg.h
+1653917353 c:\ap-btl3\btl\egg.h
 	<iostream>
 	<SDL.h>
 
@@ -61,7 +63,7 @@
 	<iostream>
 	<SDL.h>
 
-1653843751 c:\ap-btl3\btl\someconst.h
+1653911380 c:\ap-btl3\btl\someconst.h
 	<iostream>
 	<algorithm>
 	<cmath>
@@ -96,7 +98,7 @@
 	<iostream>
 	<SDL.h>
 
-1653846478 source:c:\ap-btl3\btl\good.cpp
+1653913141 source:c:\ap-btl3\btl\good.cpp
 	<iostream>
 	<chrono>
 	<random>
@@ -109,7 +111,7 @@
 	"someconst.h"
 	"Button.h"
 
-1653846478 c:\ap-btl3\btl\good.h
+1653894517 c:\ap-btl3\btl\good.h
 	<iostream>
 	<SDL.h>
 	<SDL_ttf.h>

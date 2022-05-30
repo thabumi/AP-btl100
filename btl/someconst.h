@@ -43,6 +43,7 @@ const long double ROW_DISTANCE = 20 * sqrt(3) + 0.5;
 const int BIG_ROW = 9;
 const int SMALL_ROW = 8;
 
+const int BOMB_VALUE = 5;
 
 const int MENU_PLAY_BUTTON_WIDTH = 110;
 const int MENU_PLAY_BUTTON_HEIGHT = 30;
@@ -64,6 +65,9 @@ const SDL_Color RED_COLOR = {255, 0, 0};
 const SDL_Color WHITE_COLOR = {255, 255, 255};
 const SDL_Color BLACK_COLOR = {0, 0, 0};
 const SDL_Color GREEN_COLOR = {0, 128, 0};
+const SDL_Color GRAY_COLOR = {192, 192, 192};
+
+const int INF = 1e9;
 
 const SDL_Color DEFAULT_COLOR = BLACK_COLOR;
 

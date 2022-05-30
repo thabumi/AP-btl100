@@ -48,10 +48,13 @@ public:
 private:
     string boardFile = "board.txt";
     string highscoreFile = "highscore.txt";
-    int highscore = 0;
     SDL_Rect pauseButton;
 
+
+
     vector<vector<Egg>> board;
+    int eggType = 3;
+    int highscore = 0;
     Egg shooter;
     SDL_Rect gmrect;
     int score = 0;

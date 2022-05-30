@@ -45,10 +45,10 @@ Good::Good() {
         board[i].resize(9 - i % 2);
         for (int j = 0; j < 8 + 1 - i % 2; j++) {
             if (i % 2 == 0) {
-                board[i][j] = Egg(static_cast<Egg::Type>(rng() % 3), GAME_UPLEFT_X + EGG_RADIUS + 2 * j * EGG_RADIUS, EGG_RADIUS + i * ROW_DISTANCE);
+                board[i][j] = Egg(static_cast<Egg::Type>(rng() % eggType), GAME_UPLEFT_X + EGG_RADIUS + 2 * j * EGG_RADIUS, EGG_RADIUS + i * ROW_DISTANCE);
             }
             else {
-                board[i][j] = Egg(static_cast<Egg::Type>(rng() % 3), GAME_UPLEFT_X + EGG_RADIUS * 2 + 2 * j * EGG_RADIUS, EGG_RADIUS + i * ROW_DISTANCE);
+                board[i][j] = Egg(static_cast<Egg::Type>(rng() % eggType), GAME_UPLEFT_X + EGG_RADIUS * 2 + 2 * j * EGG_RADIUS, EGG_RADIUS + i * ROW_DISTANCE);
             }
         }
     }
@@ -94,32 +94,127 @@ void Good::down() {
     if (board[1].size() == BIG_ROW) {
         board[0].assign(SMALL_ROW, Egg());
         for (int j = 0; j < (int)board[0].size(); j++) {
-            board[0][j] = Egg(static_cast<Egg::Type>(rng() % 3), GAME_UPLEFT_X + EGG_RADIUS * 2 + 2 * j * EGG_RADIUS, EGG_RADIUS);
+            board[0][j] = Egg(static_cast<Egg::Type>(rng() % eggType), GAME_UPLEFT_X + EGG_RADIUS * 2 + 2 * j * EGG_RADIUS, EGG_RADIUS);
         }
     }
     else {
         board[0].assign(BIG_ROW, Egg());
         for (int j = 0; j < (int)board[0].size(); j++) {
-            board[0][j] = Egg(static_cast<Egg::Type>(rng() % 3), GAME_UPLEFT_X + EGG_RADIUS + 2 * j * EGG_RADIUS, EGG_RADIUS);
+            board[0][j] = Egg(static_cast<Egg::Type>(rng() % eggType), GAME_UPLEFT_X + EGG_RADIUS + 2 * j * EGG_RADIUS, EGG_RADIUS);
         }
     }
     longRow ^= 1;
 }
 
 bool Good::explosion(int startingRow, int startingCol) {
-
     vector<vector<bool>> visited(board.size());
     for (int i = 0; i < (int)board.size(); i++) {
         visited[i].assign(board[i].size(), false);;
     }
     queue<pair<int, int>> q;
-
     int _type = board[startingRow][startingCol].getType();
-
     int cnt = 0;
     q.push({startingRow, startingCol});
     visited[startingRow][startingCol] = true;
     cnt++;
+    if (_type == BOMB_VALUE) {
+        vector<vector<int>> dist(board.size());
+        for (int i = 0; i < (int)board.size(); i++) {
+            dist[i].assign(board[i].size(), INF);
+        }
+        dist[startingRow][startingCol] = 0;
+        while (!q.empty()) {
+            pair<int, int> t = q.front();
+            q.pop();
+            int x = t.first, y = t.second;
+            if (board[x].size() == BIG_ROW) {
+                for (int i = 0; i < 6; i++) {
+                    int x0 = x + aLongRow[i];
+                    int y0 = y + aLongCol[i];
+                    if (x0 >= 0 && x0 < (int)board.size() && y0 >= 0 && y0 < (int)board[x0].size()) {
+                        if (!visited[x0][y0] && board[x0][y0].getVisible()) {
+                            visited[x0][y0] = true;
+                            dist[x0][y0] = dist[x][y] + 1;
+                            if (dist[x0][y0] <= 2) {
+                                q.push({x0, y0});
+                                cnt++;
+                            }
+
+
+                        }
+                    }
+                }
+            }
+            else {
+                for (int i = 0; i < 6; i++) {
+                    int x0 = x + aShortRow[i];
+                    int y0 = y + aShortCol[i];
+                    if (x0 >= 0 && x0 < (int)board.size() && y0 >= 0 && y0 < (int)board[x0].size()) {
+                        if (!visited[x0][y0] && board[x0][y0].getVisible()) {
+                            visited[x0][y0] = true;
+                            dist[x0][y0] = dist[x][y] + 1;
+                            if (dist[x0][y0] <= 2) {
+                                q.push({x0, y0});
+                                cnt++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < (int)board.size(); i++) {
+            for (int j = 0; j < (int)board[i].size(); j++) {
+                if (visited[i][j]) {
+                    board[i][j].setVisible(0);
+                }
+            }
+        }
+        for (int j = 0; j < (int)board[0].size(); j++) {
+            if (board[0][j].getVisible() && !visited[0][j]) {
+                queue<pair<int, int>> q;
+                q.push({0, j});
+                visited[0][j] = true;
+                while (!q.empty()) {
+                    pair<int, int> t = q.front();
+                    q.pop();
+                    int x = t.first, y = t.second;
+                    if (board[x].size() == BIG_ROW) {
+                        for (int i = 0; i < 6; i++) {
+                            int x0 = x + aLongRow[i];
+                            int y0 = y + aLongCol[i];
+                            if (x0 >= 0 && x0 < (int)board.size() && y0 >= 0 && y0 < (int)board[x0].size()) {
+                                if (!visited[x0][y0] && board[x0][y0].getVisible()) {
+                                    visited[x0][y0] = true;
+                                    q.push({x0, y0});
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        for (int i = 0; i < 6; i++) {
+                            int x0 = x + aShortRow[i];
+                            int y0 = y + aShortCol[i];
+                            if (x0 >= 0 && x0 < (int)board.size() && y0 >= 0 && y0 < (int)board[x0].size()) {
+                                if (!visited[x0][y0] && board[x0][y0].getVisible()) {
+                                    visited[x0][y0] = true;
+                                    q.push({x0, y0});
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < (int)board.size(); i++) {
+            for (int j = 0; j < (int)board[i].size(); j++) {
+                if (!visited[i][j]) {
+                    board[i][j].setVisible(0);
+                }
+            }
+        }
+        score += cnt * 10;
+        return true;
+    }
     while (!q.empty()) {
         pair<int, int> t = q.front();
         q.pop();
@@ -210,7 +305,7 @@ bool Good::explosion(int startingRow, int startingCol) {
 
 void Good::reloadAmmo() {
     mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-    shooter = Egg(static_cast<Egg::Type>(rng() % 3), EGG_TO_SHOOT_X, EGG_TO_SHOOT_Y);
+    shooter = Egg(static_cast<Egg::Type>(rng() % eggType), EGG_TO_SHOOT_X, EGG_TO_SHOOT_Y);
 }
 
 bool Good::notGoodAnymore() {
@@ -324,13 +419,22 @@ int Good::run(SDL_Window* window, SDL_Renderer* renderer) {
                 }
             }
             else {
+
                 pair<double, double> vt = standardize({x - EGG_TO_SHOOT_X, y - EGG_TO_SHOOT_Y});
                 double stepX = vt.first;
                 double stepY = vt.second;
 
-                bool b = false;
-                while (!b) {
-
+                bool collisionYet = false;
+                auto beginn = std::chrono::high_resolution_clock::now();
+                while (!collisionYet) {
+                    auto endd = std::chrono::high_resolution_clock::now();
+                    if (chrono::duration_cast<std::chrono::duration<double>>(endd - beginn).count() > 5) {
+                        shooter = Egg(static_cast<Egg::Type>(shooter.getType()), EGG_TO_SHOOT_X, EGG_TO_SHOOT_Y);
+                        draw(renderer);
+                        SDL_RenderPresent(renderer);
+                        SDL_Delay(5);
+                        break;
+                    }
                     shooter.moves(stepX, stepY);
                     if (shooter.getX() + EGG_RADIUS >= GAME_DOWNRIGHT_X || shooter.getX() - EGG_RADIUS <= GAME_UPLEFT_X) {
                         shooter.moves(-stepX, -stepY);
@@ -344,19 +448,28 @@ int Good::run(SDL_Window* window, SDL_Renderer* renderer) {
                     }
 
                     for (int i = 0; i < 12; i++) {
-                        bool brk = false;
+                        bool breaker = false;
                         for (int j = 0; j < (int)board[i].size(); j++) {
                             if (shooter.collision(board[i][j]) && board[i][j].getVisible()) {
-
+                                int prevScore = score;
                                 pair<int, int> p = closestNeighbour(i, j);
                                 if (!explosion(p.first, p.second)) {
+                                    if(notGoodAnymore()) {
+                                        shooter = Egg(static_cast<Egg::Type>(rng() % eggType), EGG_TO_SHOOT_X, EGG_TO_SHOOT_Y, 0);
+                                        draw(renderer);
+                                        renderEndGame(renderer);
+                                        SDL_RenderPresent(renderer);
+                                        resetGame();
+                                        SDL_Delay(2000);
+                                        return 1;
+                                    }
                                     countDown++;
                                     if (countDown == 5) {
                                         countDown = 0;
                                         down();
                                     }
                                     if(notGoodAnymore()) {
-                                        shooter = Egg(static_cast<Egg::Type>(rng() % 3), EGG_TO_SHOOT_X, EGG_TO_SHOOT_Y, 0);
+                                        shooter = Egg(static_cast<Egg::Type>(rng() % eggType), EGG_TO_SHOOT_X, EGG_TO_SHOOT_Y, 0);
                                         draw(renderer);
                                         renderEndGame(renderer);
                                         SDL_RenderPresent(renderer);
@@ -366,9 +479,11 @@ int Good::run(SDL_Window* window, SDL_Renderer* renderer) {
                                     }
                                 }
                                 else {
+
                                     highscore = max(highscore, score);
                                     if (notGoodAnymore()) {
-                                        shooter = Egg(static_cast<Egg::Type>(rng() % 3), EGG_TO_SHOOT_X, EGG_TO_SHOOT_Y, 0);
+
+                                        shooter = Egg(static_cast<Egg::Type>(rng() % eggType), EGG_TO_SHOOT_X, EGG_TO_SHOOT_Y, 0);
                                         draw(renderer);
                                         renderEndGame(renderer);
                                         SDL_RenderPresent(renderer);
@@ -378,15 +493,39 @@ int Good::run(SDL_Window* window, SDL_Renderer* renderer) {
                                     }
                                     if (blank()) {
                                         down();
+                                        if (notGoodAnymore()) {
+
+                                            shooter = Egg(static_cast<Egg::Type>(rng() % eggType), EGG_TO_SHOOT_X, EGG_TO_SHOOT_Y, 0);
+                                            draw(renderer);
+                                            renderEndGame(renderer);
+                                            SDL_RenderPresent(renderer);
+                                            resetGame();
+                                            SDL_Delay(2000);
+                                            return 1;
+                                        }
                                     }
+
                                 }
-                                shooter = Egg(static_cast<Egg::Type>(rng() % 3), EGG_TO_SHOOT_X, EGG_TO_SHOOT_Y);
-                                b = true;
-                                brk = true;
+                                if (score >= 1000) {
+                                    eggType = 4;
+                                }
+                                if (score >= 2000) {
+                                    eggType = 5;
+                                }
+                                if (prevScore / 500 < score / 500) {
+                                    shooter = Egg(static_cast<Egg::Type>(BOMB_VALUE), EGG_TO_SHOOT_X, EGG_TO_SHOOT_Y);
+                                }
+
+                                else {
+                                    shooter = Egg(static_cast<Egg::Type>(rng() % eggType), EGG_TO_SHOOT_X, EGG_TO_SHOOT_Y);
+                                }
+
+                                collisionYet = true;
+                                breaker = true;
                                 break;
                             }
                         }
-                        if (brk) {
+                        if (breaker) {
                             break;
                         }
                     }
@@ -510,7 +649,7 @@ void Good::loadData() {
         int typee;
         fin >> typee;
         shooter.setType(static_cast<Egg::Type>(typee));
-        fin >> score;
+        fin >> score >> eggType >> countDown;
     }
     fin.close();
     ifstream finn("highscore.txt");
@@ -530,7 +669,9 @@ void Good::saveData() {
         fout << '\n';
     }
     fout << shooter.getType() << '\n';
-    fout << score;
+    fout << score << '\n';
+    fout << eggType << '\n';
+    fout << countDown << '\n';
     fout.close();
     remove("highscore.txt");
     ofstream foutt("highscore.txt");
@@ -540,17 +681,17 @@ void Good::saveData() {
 
 void Good::resetData() {
     mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-    shooter = Egg(static_cast<Egg::Type>(rng() % 3), EGG_TO_SHOOT_X, EGG_TO_SHOOT_Y);
+    shooter = Egg(static_cast<Egg::Type>(rng() % eggType), EGG_TO_SHOOT_X, EGG_TO_SHOOT_Y);
 
     board.resize(13);
     for (int i = 0; i < 13; i++) {
         board[i].resize(9 - i % 2);
         for (int j = 0; j < 8 + 1 - i % 2; j++) {
             if (i % 2 == 0) {
-                board[i][j] = Egg(static_cast<Egg::Type>(rng() % 3), GAME_UPLEFT_X + EGG_RADIUS + 2 * j * EGG_RADIUS, EGG_RADIUS + i * ROW_DISTANCE);
+                board[i][j] = Egg(static_cast<Egg::Type>(rng() % eggType), GAME_UPLEFT_X + EGG_RADIUS + 2 * j * EGG_RADIUS, EGG_RADIUS + i * ROW_DISTANCE);
             }
             else {
-                board[i][j] = Egg(static_cast<Egg::Type>(rng() % 3), GAME_UPLEFT_X + EGG_RADIUS * 2 + 2 * j * EGG_RADIUS, EGG_RADIUS + i * ROW_DISTANCE);
+                board[i][j] = Egg(static_cast<Egg::Type>(rng() % eggType), GAME_UPLEFT_X + EGG_RADIUS * 2 + 2 * j * EGG_RADIUS, EGG_RADIUS + i * ROW_DISTANCE);
             }
         }
     }
@@ -560,6 +701,8 @@ void Good::resetData() {
         }
     }
     score = 0;
+    eggType = 3;
+    countDown = 0;
     saveData();
 }
 int Good::pause(SDL_Window* window, SDL_Renderer* renderer) {
@@ -640,6 +783,7 @@ void Good::renderEndGame(SDL_Renderer* renderer) {
 void Good::resetGame() {
     score = 0;
     countDown = 0;
+    eggType = 3;
 }
 void Good::getHighscore() {
     ifstream fin("highscore.txt");

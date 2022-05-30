@@ -1,8 +1,10 @@
 #include <iostream>
 #include <SDL.h>
+#include <SDL_ttf.h>
 #include <random>
 #include <chrono>
 #include "egg.h"
+#include "good.h"
 #include "someconst.h"
 #include "drawcircle.h"
 
@@ -21,6 +23,25 @@ Egg::Egg(Type type, double x, double y, bool visible) {
 }
 
 void Egg::draw(SDL_Renderer* renderer, bool visible_) {
+    if (!visible_) {
+        return;
+    }
+    if (type_ == bomb) {
+        SDL_SetRenderDrawColor(renderer, GRAY_COLOR.r, GRAY_COLOR.g, GRAY_COLOR.b, GRAY_COLOR.a);
+        SDL_RenderFillCircle(renderer, x_, y_, EGG_RADIUS);
+        TTF_Font* myFont = TTF_OpenFont("futureforces.ttf", 15);
+
+        SDL_Texture* bombTexture = loadText(myFont, renderer, "TNT", RED_COLOR);
+        SDL_Rect bombTextureRect;
+
+        SDL_QueryTexture(bombTexture, NULL, NULL, &bombTextureRect.w, &bombTextureRect.h);
+        bombTextureRect.x = x_ - bombTextureRect.w / 2;
+        bombTextureRect.y = y_ - bombTextureRect.h / 2;
+        SDL_RenderCopy(renderer, bombTexture, NULL, &bombTextureRect);
+        TTF_CloseFont(myFont);
+        SDL_DestroyTexture(bombTexture);
+        return;
+    }
     switch (type_) {
         case red:
             SDL_SetRenderDrawColor(renderer, RED_COLOR.r, RED_COLOR.g, RED_COLOR.b, RED_COLOR.a);
@@ -37,9 +58,8 @@ void Egg::draw(SDL_Renderer* renderer, bool visible_) {
         case orange:
             SDL_SetRenderDrawColor(renderer, ORANGE_COLOR.r, ORANGE_COLOR.g, ORANGE_COLOR.b, ORANGE_COLOR.a);
             break;
-    }
-    if (!visible_) {
-        SDL_SetRenderDrawColor(renderer, BLACK_COLOR.r, BLACK_COLOR.g, BLACK_COLOR.b, BLACK_COLOR.a);
+        case bomb:
+            break;
     }
     SDL_RenderFillCircle(renderer, x_, y_, EGG_RADIUS);
 }

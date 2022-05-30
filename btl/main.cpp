@@ -14,7 +14,6 @@ home-------->(run(1)<--->(1)pause)->end(1)----->home
   v            v
 quit          quit
 */
-// todo: new egg colors and special egg
 int main(int argc, char* argv[]) {
     Game game;
     while (true) {
